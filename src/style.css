@@ -19,24 +19,47 @@ body {
   margin: 0;
   display: flex;
   place-items: center;
+  flex-direction: column;
   min-width: 320px;
   min-height: 100vh;
 }
 
-#app {
-  max-width: 1000px;
+.app {
+  max-width: 1048px;
   width: 100%;
   margin: 0 auto;
-  padding: 2rem;
+  padding: 24px;
   text-align: center;
+  box-sizing: border-box;
 }
 
-#app polyline {
-  animation: line 5s linear forwards;
+.app svg {
+  display: block;
 }
 
-@keyframes line {
-  to{
-    stroke-dashoffset: 0;
-  }
+.svg-line-chart {
+  position: relative;
+}
+
+.svg-line-chart:before,
+.svg-line-chart:after {
+  display: none;
+  content: '';
+  position: absolute;
+  left: 40px;
+  right: 5%;
+  border-left: 1px solid rgba(255, 255, 255, 0.5);
+  border-right: 1px solid rgba(255, 255, 255, 0.5);
+  height: 120px;
+  pointer-events: none;
+}
+
+.svg-line-chart:before {
+  top: 24px;
+  border-top: 1px solid rgba(255, 255, 255, 0.5);
+}
+
+.svg-line-chart:after {
+  bottom: 8px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.5);
 }
