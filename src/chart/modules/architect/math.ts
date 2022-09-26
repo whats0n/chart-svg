@@ -1,11 +1,7 @@
+import { DataPoint, Dataset } from '~/types/data'
 import { Dependencies } from '~/types/dependencies'
-import { Padding, Size } from '~/types/size'
-import {
-  ArchitectArea,
-  ArchitectPath,
-  ArchitectPoint,
-  ArchitectSize,
-} from './types'
+import { Size } from '~/types/size'
+import { ArchitectArea, ArchitectDatasetPoint, ArchitectSize } from './types'
 
 export class SVGLineChartMath {
   private dependencies: Dependencies
@@ -60,63 +56,73 @@ export class SVGLineChartMath {
     }
   }
 
-  public getPolylines = ({ width, height }: ArchitectSize): ArchitectPath[] => {
-    const area = this.getArea({ width, height })
+  private getPointPosition = ({
+    size,
+    strokeWidth,
+    x,
+    y,
+  }: {
+    size: ArchitectArea
+    strokeWidth: number
+    x: number
+    y: number
+  }): { x: number; y: number } => {
+    const height = size.height - strokeWidth
 
-    return this.dependencies.parameters
-      .getData()
-      .map<ArchitectPath>((dataset) => {
-        return dataset.data.map(({ x, y }) => {
-          const style = this.dependencies.parameters.resolvePathStyle(
-            dataset.style?.path
-          )
+    const width = size.width - strokeWidth
 
-          const height = area.height - style.strokeWidth
-
-          const positionY =
-            height -
-            (y / 100) * height +
-            style.strokeWidth / 2 +
-            area.padding.top
-
-          const width = area.width - style.strokeWidth
-
-          const positionX =
-            (x / 100) * width + style.strokeWidth / 2 + area.padding.left
-
-          const result: ArchitectPoint = [positionX, positionY]
-
-          return result
-        })
-      })
+    return {
+      x: (x / 100) * width + strokeWidth / 2 + size.padding.left,
+      y: height - (y / 100) * height + strokeWidth / 2 + size.padding.top,
+    }
   }
 
-  public getPolygons = ({ width, height }: ArchitectSize): ArchitectPath[] => {
-    const area = this.getArea({ width, height })
+  private getPathPosition = ({
+    size,
+    strokeWidth,
+    x,
+    y,
+  }: {
+    size: ArchitectArea
+    strokeWidth: number
+    x: number
+    y: number
+  }): { x: number; y: number } => {
+    const height = size.height - strokeWidth
 
-    return this.dependencies.parameters
-      .getData()
-      .map<ArchitectPath>((dataset) => {
-        return dataset.data.map(({ x, y }) => {
-          const style = this.dependencies.parameters.resolvePathStyle(
-            dataset.style?.path
-          )
+    return {
+      x: (x / 100) * size.width + size.padding.left,
+      y: height - (y / 100) * height + strokeWidth / 2 + size.padding.top,
+    }
+  }
 
-          const height = area.height - style.strokeWidth
+  public getDatasetDetails = (
+    size: ArchitectSize,
+    dataset: Dataset
+  ): ArchitectDatasetPoint[] => {
+    const { strokeWidth } = this.dependencies.parameters.resolvePathStyle(
+      dataset.style?.path
+    )
 
-          const positionY =
-            height -
-            (y / 100) * height +
-            style.strokeWidth / 2 +
-            area.padding.top
+    const area = this.getArea(size)
 
-          const result: ArchitectPoint = [
-            (x / 100) * area.width + area.padding.left,
-            positionY,
-          ]
+    const points: ArchitectDatasetPoint[] =
+      dataset.data.map<ArchitectDatasetPoint>((data) => ({
+        point: this.getPointPosition({
+          size: area,
+          strokeWidth,
+          x: data.x,
+          y: data.y,
+        }),
+        path: this.getPathPosition({
+          size: area,
+          strokeWidth,
+          x: data.x,
+          y: data.y,
+        }),
+        value: data,
+      }))
 
-          return result
-        })
-      })
+    return points
   }
 }

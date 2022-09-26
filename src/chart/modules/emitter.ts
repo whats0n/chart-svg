@@ -1,6 +1,6 @@
 import { DataPoint } from '~/types/data'
 
-export type Events = 'enter' | 'leave' | 'select'
+export type Events = 'enter' | 'leave' | 'select' | 'resize'
 
 export interface EventEmitterParameters {
   position: { top: number; left: number }
@@ -16,6 +16,7 @@ export class EventEmitter {
     enter: [],
     leave: [],
     select: [],
+    resize: [],
   }
 
   public on = (event: Events, listener: EventEmitterListener): void => {

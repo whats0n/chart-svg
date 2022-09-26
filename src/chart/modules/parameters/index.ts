@@ -1,5 +1,4 @@
 import { Dataset } from '~/types/data'
-import { LinearGradientOptions } from '~/types/gradient'
 import { Size } from '~/types/size'
 import { PathStyle, PointStyle } from '~/types/style'
 import { DeepPartial } from '~/types/utility'
@@ -11,21 +10,16 @@ export class SVGLineChartParameters {
 
   private size: Size = defaults.size
 
-  private linearGradients: LinearGradientOptions[] = []
-
   private meta: ParametersMeta = {
     responsive: defaults.responsive,
     endpoints: defaults.endpoints,
   }
 
   constructor(parameters: Parameters) {
-    this.setData(parameters.datasets)
-      .mergeSize(parameters.size)
-      .setLinearGradients(parameters.linearGradients)
-      .setMeta({
-        responsive: parameters.responsive,
-        endpoints: parameters.endpoints,
-      })
+    this.setData(parameters.datasets).mergeSize(parameters.size).setMeta({
+      responsive: parameters.responsive,
+      endpoints: parameters.endpoints,
+    })
   }
 
   private mergeSize = (size?: DeepPartial<Size>): this => {
@@ -38,11 +32,6 @@ export class SVGLineChartParameters {
       },
     }
 
-    return this
-  }
-
-  private setLinearGradients = (gradients?: LinearGradientOptions[]): this => {
-    this.linearGradients = gradients || []
     return this
   }
 
@@ -91,26 +80,11 @@ export class SVGLineChartParameters {
     ...style,
   })
 
-  public getLinearGradients = (): LinearGradientOptions[] =>
-    this.linearGradients
-
   public getMeta = (): ParametersMeta => this.meta
 
-  public update = (parameters: Omit<Parameters, 'datasets'>): this => {
-    const gradients = parameters.linearGradients || []
-
-    this.mergeSize(parameters.size)
-      .setLinearGradients([
-        ...this.linearGradients.filter(({ id }) =>
-          gradients.every((gradient) => gradient.id !== id)
-        ),
-        ...gradients,
-      ])
-      .setMeta({
-        responsive: parameters.responsive,
-        endpoints: parameters.endpoints,
-      })
-
-    return this
-  }
+  public update = (parameters: Omit<Parameters, 'datasets'>): this =>
+    this.mergeSize(parameters.size).setMeta({
+      responsive: parameters.responsive,
+      endpoints: parameters.endpoints,
+    })
 }

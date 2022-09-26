@@ -1,3 +1,4 @@
+import { DataPoint } from '~/types/data'
 import { Padding, Size } from '~/types/size'
 
 export type ArchitectPoint = [number, number]
@@ -19,4 +20,10 @@ export type ArchitectArea = Pick<Size, 'width' | 'height'> &
 export interface ArchitectDOMPoints {
   g: SVGGElement
   circles: SVGCircleElement[]
+}
+
+export interface ArchitectDatasetPoint {
+  point: { x: number; y: number }
+  path: { x: number; y: number }
+  value: DataPoint
 }
