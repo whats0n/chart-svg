@@ -48,6 +48,14 @@ SVGLineChartGradient.addLinearGradient({
   ],
 })
 
+SVGLineChartGradient.addRadialGradient({
+  id: 'radial-gradient-1',
+  partials: [
+    { offset: '0', color: 'red' },
+    { offset: '1', color: 'yellow' },
+  ],
+})
+
 SVGLineChartGradient.mount()
 
 const apps = ['#app', '#app2']

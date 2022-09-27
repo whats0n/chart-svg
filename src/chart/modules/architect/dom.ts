@@ -54,7 +54,7 @@ export class SVGLineChartDOM {
 
     let { width, height } = this.wrapper.getBoundingClientRect()
 
-    const resizeObserver = new ResizeObserver((e) => {
+    const resizeObserver = new ResizeObserver(() => {
       const rect = this.wrapper.getBoundingClientRect()
 
       if (rect.width === width && rect.height === height) return

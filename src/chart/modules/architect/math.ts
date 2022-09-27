@@ -1,4 +1,4 @@
-import { DataPoint, Dataset } from '~/types/data'
+import { Dataset } from '~/types/data'
 import { Dependencies } from '~/types/dependencies'
 import { Size } from '~/types/size'
 import { ArchitectArea, ArchitectDatasetPoint, ArchitectSize } from './types'

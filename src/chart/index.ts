@@ -5,7 +5,7 @@ import { SVGLineChartGradient as Gradient } from './modules/gradient'
 import { SVGLineChartParameters } from './modules/parameters'
 import { Parameters } from './modules/parameters/types'
 import { Dataset } from './types/data'
-import { createId } from './utilities/createId'
+import { createId } from './utility/createId'
 
 export const SVGLineChartGradient = Gradient
 

@@ -1,5 +1,3 @@
-import { Dependencies } from '~/types/dependencies'
-
 export class SVGLineChartDesigner {
   public static base?: HTMLStyleElement
 
