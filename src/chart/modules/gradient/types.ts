@@ -8,14 +8,10 @@ interface GradientPartial {
   opacity?: string
 }
 
-interface GradientTransform {
-  [k: string]: string | number
-}
-
 export interface LinearGradientOptions extends PartialNumbers {
   id: string
   partials: GradientPartial[]
-  gradientTransform?: GradientTransform
+  gradientTransform?: Record<string, string | number>
   gradientUnits?: 'userSpaceOnUse' | 'objectBoundingBox'
   spreadMethod?: 'pad' | 'reflect' | 'repeat'
   href?: string

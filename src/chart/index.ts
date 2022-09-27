@@ -39,6 +39,8 @@ export class SVGLineChart {
   public destroy = (): void => {
     if (this.isDestroyed) return
 
+    this.emitter.destroy()
+
     SVGLineChart.instances = SVGLineChart.instances.filter(
       (instance) => instance !== this
     )

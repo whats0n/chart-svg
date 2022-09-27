@@ -19,6 +19,12 @@ export class EventEmitter {
     resize: [],
   }
 
+  public destroy = () => {
+    Object.keys(this.events).forEach((event) => {
+      this.events[event as keyof typeof this.events] = []
+    })
+  }
+
   public on = (event: Events, listener: EventEmitterListener): void => {
     this.events[event].push(listener)
   }

@@ -1,7 +1,10 @@
 export default {
   responsive: true,
 
-  endpoints: { start: true, end: true },
+  endpoints: {
+    fill: { start: true, end: true },
+    stroke: { start: false, end: false },
+  },
 
   size: {
     width: 500,

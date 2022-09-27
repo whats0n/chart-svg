@@ -63,7 +63,11 @@ const apps = ['#app', '#app2']
 let charts = apps.map((id) => {
   const chart = new SVGLineChart(document.querySelector(id) as HTMLElement, {
     responsive: false,
-    endpoints: false,
+    // endpoints: {
+    //   start: true,
+    //   end: true,
+    //   stroke: { start: true, end: false },
+    // },
     size: {
       width: 1000,
       height: 400,
@@ -71,7 +75,7 @@ let charts = apps.map((id) => {
         top: 24,
         left: '40',
         right: '5%',
-        bottom: '2%',
+        bottom: '20%',
       },
     },
     datasets: [
@@ -90,7 +94,7 @@ let charts = apps.map((id) => {
           },
           point: {
             size: 24,
-            fill: `black`,
+            fill: `url(#linear-gradient-1)`,
             shadow: '0 3px 3px rgba(149, 76, 233, 0.13)',
           },
           pointHover: {
@@ -172,6 +176,8 @@ document.querySelector('.js-destroy')?.addEventListener('click', (e) => {
   charts.forEach((chart) => {
     chart.destroy()
   })
+
+  SVGLineChartGradient.destroy()
 })
 
 document.querySelector('.js-create')?.addEventListener('click', (e) => {
@@ -205,4 +211,58 @@ document.querySelector('.js-create')?.addEventListener('click', (e) => {
 
     return chart
   })
+
+  SVGLineChartGradient.addLinearGradient({
+    id: 'linear-gradient-1',
+    partials: [
+      { offset: '0', color: '#954ce9' },
+      { offset: '0.3', color: '#954ce9' },
+      { offset: '0.6', color: '#24c1ed' },
+      { offset: '1', color: '#24c1ed' },
+    ],
+  })
+
+  SVGLineChartGradient.addLinearGradient({
+    id: 'linear-gradient-2',
+    x1: 0,
+    x2: 0,
+    y1: 0,
+    y2: 100,
+    partials: [
+      { offset: '0', color: 'rgba(149, 76, 233, 0.07)' },
+      { offset: '0.5', color: 'rgba(149, 76, 233, 0.13)' },
+      { offset: '1', color: 'rgba(149, 76, 233, 0)' },
+    ],
+  })
+
+  SVGLineChartGradient.addLinearGradient({
+    id: 'linear-gradient-3',
+    partials: [
+      { offset: '0', color: '#00d5bd' },
+      { offset: '1', color: '#24c1ed' },
+    ],
+  })
+
+  SVGLineChartGradient.addLinearGradient({
+    id: 'linear-gradient-4',
+    x1: 0,
+    x2: 0,
+    y1: 0,
+    y2: 100,
+    partials: [
+      { offset: '0', color: 'rgba(0, 213, 189, 0.07)' },
+      { offset: '0.5', color: 'rgba(0, 213, 189, 0.13)' },
+      { offset: '1', color: 'rgba(0, 213, 189, 0)' },
+    ],
+  })
+
+  SVGLineChartGradient.addRadialGradient({
+    id: 'radial-gradient-1',
+    partials: [
+      { offset: '0', color: 'red' },
+      { offset: '1', color: 'yellow' },
+    ],
+  })
+
+  SVGLineChartGradient.mount()
 })

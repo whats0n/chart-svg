@@ -3,6 +3,17 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
+
+  "files": ["dist"],
+  "main": "./dist/svg-line-chart.umd.cjs",
+  "module": "./dist/svg-line-chart.js",
+  "exports": {
+    ".": {
+      "import": "./dist/svg-line-chart.js",
+      "require": "./dist/svg-line-chart.umd.cjs"
+    }
+  },
+
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",

@@ -3,7 +3,8 @@ import { Size } from '~/types/size'
 import { PathStyle, PointStyle } from '~/types/style'
 import { DeepPartial } from '~/types/utility'
 import defaults from './defaults'
-import { Parameters, ParametersMeta } from './types'
+import { isEndpointObject } from './guards/endpoints'
+import { Parameters, ParametersEndpointsBase, ParametersMeta } from './types'
 
 export class SVGLineChartParameters {
   private datasets: Dataset[] = []
@@ -40,18 +41,66 @@ export class SVGLineChartParameters {
       Omit<ParametersMeta, 'endpoints'> & { endpoints: Parameters['endpoints'] }
     >
   ): this => {
-    const endpoints =
-      typeof meta?.endpoints === 'boolean'
-        ? { start: meta.endpoints, end: meta.endpoints }
-        : meta?.endpoints || {}
+    this.meta.responsive = meta?.responsive ?? defaults.responsive
 
-    this.meta = {
-      responsive: meta?.responsive ?? defaults.responsive,
-      endpoints: {
-        ...this.meta.endpoints,
-        ...defaults.endpoints,
-        ...endpoints,
-      },
+    const resolvePartialEndpoint = (
+      type: 'start' | 'end',
+      primary: ParametersEndpointsBase | boolean | undefined,
+      secondary: ParametersEndpointsBase | boolean | undefined,
+      defaultValue: Required<ParametersEndpointsBase>
+    ): boolean => {
+      if (typeof primary === 'boolean') return primary
+
+      const primaryType = primary?.[type]
+
+      if (typeof primaryType === 'boolean') return primaryType
+
+      if (typeof secondary === 'boolean') return secondary
+
+      const secondaryType = secondary?.[type]
+
+      if (typeof secondaryType === 'boolean') return secondaryType
+
+      return defaultValue[type]
+    }
+
+    if (typeof meta?.endpoints === 'boolean') {
+      this.meta.endpoints.fill.start = meta.endpoints
+      this.meta.endpoints.fill.end = meta.endpoints
+      this.meta.endpoints.stroke.start = meta.endpoints
+      this.meta.endpoints.stroke.end = meta.endpoints
+    }
+
+    const endpoints = meta?.endpoints
+
+    if (isEndpointObject(endpoints)) {
+      this.meta.endpoints.fill.start = resolvePartialEndpoint(
+        'start',
+        endpoints.fill,
+        endpoints,
+        defaults.endpoints.fill
+      )
+
+      this.meta.endpoints.fill.end = resolvePartialEndpoint(
+        'end',
+        endpoints.fill,
+        endpoints,
+        defaults.endpoints.fill
+      )
+
+      this.meta.endpoints.stroke.start = resolvePartialEndpoint(
+        'start',
+        endpoints.stroke,
+        endpoints,
+        defaults.endpoints.stroke
+      )
+
+      this.meta.endpoints.stroke.end = resolvePartialEndpoint(
+        'end',
+        endpoints.stroke,
+        endpoints,
+        defaults.endpoints.stroke
+      )
     }
 
     return this

@@ -192,7 +192,7 @@ export class SVGLineChartDataset {
     return this
   }
 
-  private getEndpoints = (
+  private getFillEndpoints = (
     first: ArchitectDatasetPoint,
     last: ArchitectDatasetPoint
   ): { start: string; end: string } => {
@@ -200,12 +200,30 @@ export class SVGLineChartDataset {
 
     const size = this.dependencies.dom.getSize()
 
-    const start = endpoints.start
+    const start = endpoints.fill.start
       ? [0, size.height]
       : [first.path.x, size.height]
-    const end = endpoints.end
+    const end = endpoints.fill.end
       ? [size.width, size.height]
       : [last.path.x, size.height]
+
+    return {
+      start: start.join(','),
+      end: end.join(','),
+    }
+  }
+
+  private getStrokeEndpoints = (): { start: string; end: string } => {
+    const { strokeWidth } = this.dependencies.parameters.resolvePathStyle(
+      this.dataset.style?.path
+    )
+
+    const offset = strokeWidth / 2
+
+    const size = this.dependencies.dom.getSize()
+
+    const start = [offset, size.height - offset]
+    const end = [size.width - offset, size.height - offset]
 
     return {
       start: start.join(','),
@@ -217,11 +235,6 @@ export class SVGLineChartDataset {
     const position = this.dependencies.math.getDatasetDetails(
       this.dependencies.dom.getSize(),
       this.dataset
-    )
-
-    const { end, start } = this.getEndpoints(
-      position[0],
-      position[position.length - 1]
     )
 
     const { fill, stroke } = position.reduce<
@@ -238,16 +251,32 @@ export class SVGLineChartDataset {
       { fill: [], stroke: [] }
     )
 
-    this.dom.polygon.setAttribute(
-      'points',
-      [start, fill.join(' '), end].join(' ')
+    const fillEndpoints = this.getFillEndpoints(
+      position[0],
+      position[position.length - 1]
     )
 
-    this.dom.polyline.setAttribute('points', stroke.join(' '))
+    this.dom.polygon.setAttribute(
+      'points',
+      [fillEndpoints.start, fill.join(' '), fillEndpoints.end].join(' ')
+    )
+
+    const { endpoints } = this.dependencies.parameters.getMeta()
+
+    const strokeEndpoints = this.getStrokeEndpoints()
+
+    const strokePoints = [stroke.join(' ')]
+
+    if (endpoints.stroke.start) strokePoints.unshift(strokeEndpoints.start)
+
+    if (endpoints.stroke.end) strokePoints.push(strokeEndpoints.end)
+
+    this.dom.polyline.setAttribute('points', strokePoints.join(' '))
 
     const lineLength = this.dom.polyline.getTotalLength()
 
     this.dom.polyline.style.strokeDasharray = `${lineLength}`
+
     this.dom.polyline.style.strokeDashoffset = `${lineLength}`
 
     return this

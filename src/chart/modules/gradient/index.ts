@@ -87,6 +87,20 @@ export class SVGLineChartGradient {
     document.body.appendChild(SVGLineChartGradient.svg)
   }
 
+  public static destroy = (): void => {
+    SVGLineChartGradient.store.linear.forEach((gradient, id) => {
+      gradient.parentNode?.removeChild(gradient)
+      SVGLineChartGradient.store.linear.delete(id)
+    })
+
+    SVGLineChartGradient.store.radial.forEach((gradient, id) => {
+      gradient.parentNode?.removeChild(gradient)
+      SVGLineChartGradient.store.radial.delete(id)
+    })
+
+    document.body.removeChild(SVGLineChartGradient.svg)
+  }
+
   public static addLinearGradient = (options: LinearGradientOptions): void => {
     const gradient = addCommon(
       document.createElementNS('http://www.w3.org/2000/svg', 'linearGradient'),
