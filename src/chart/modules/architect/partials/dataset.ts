@@ -1,7 +1,7 @@
 import { EventEmitterParameters } from '~/modules/emitter'
 import { Dataset } from '~/types/data'
 import { Dependencies } from '~/types/dependencies'
-import { createId } from '~/utility/createId'
+import { createId } from '../../../utility/createId'
 import { SVGLineChartDOM } from '../dom'
 import { SVGLineChartMath } from '../math'
 import { ArchitectDatasetPoint, ArchitectPath } from '../types'
