@@ -1,16 +1,16 @@
 {
-  "name": "chart-svg",
+  "name": "simple-svg-line-chart",
   "private": true,
   "version": "0.0.0",
   "type": "module",
 
   "files": ["dist"],
-  "main": "./dist/svg-line-chart.umd.cjs",
-  "module": "./dist/svg-line-chart.js",
+  "main": "./dist/simple-svg-line-chart.umd.cjs",
+  "module": "./dist/simple-svg-line-chart.js",
   "exports": {
     ".": {
-      "import": "./dist/svg-line-chart.js",
-      "require": "./dist/svg-line-chart.umd.cjs"
+      "import": "./dist/simple-svg-line-chart.js",
+      "require": "./dist/simple-svg-line-chart.umd.cjs"
     }
   },
 

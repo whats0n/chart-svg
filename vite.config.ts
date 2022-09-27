@@ -6,7 +6,7 @@ export default defineConfig({
     lib: {
       entry: './src/chart/index.ts',
       name: 'SVGLineChart',
-      fileName: 'svg-line-chart',
+      fileName: 'simple-svg-line-chart',
       formats: ['es', 'umd'],
     },
   },
